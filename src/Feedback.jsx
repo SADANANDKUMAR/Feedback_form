@@ -12,9 +12,11 @@ const Feedback = () => {
   const [yes, setYes] = React.useState('');
   const [data, setData] = React.useState({
 
-    reasonone: "",
+    questiontwo: "",
+    questionthird:"",
     yes :"",
-    reasoninput:""
+    reasoninputtwo:"",
+    reasoninputthree:""
 
   })
 
@@ -161,7 +163,7 @@ const Feedback = () => {
 
                 {feedbackOne === 'bad' &&
                   <div className="feedback-send">
-                    <select className="selectreason" id="reasonone" name="reasonone" onChange={(e) => handleChange(e)}>
+                    <select className="selectreason" id="reasonone" name="questiontwo" onChange={(e) => handleChange(e)}>
                       <option>समस्या श्रेणी/Issue category:</option>
                       <option value="आधिकारिक और कमांडिग">आधिकारिक और कमांडिग </option>
                       <option value="गैर -सहायक">गैर -सहायक</option>
@@ -173,9 +175,9 @@ const Feedback = () => {
 
                     <input
                       type="text"
-                      name="reasoninput"
+                      name="reasoninputtwo"
                       className="reasoninput"
-                      placeholder="Please specify the reason"
+                      placeholder="कृपया कारण निर्दिष्ट करें"
                       onChange={(e) => handleChange(e)}
                     />
                     {/* <button
@@ -191,7 +193,7 @@ const Feedback = () => {
                 {feedbackOne === 'good' &&
 
                   <div className="feedback-send">
-                    <select className="selectreason" id="reasonone" name="reasonone" onChange={(e) => handleChange(e)}>
+                    <select className="selectreason" id="reasonone" name="questiontwo" onChange={(e) => handleChange(e)}>
                       <option>सकािात्मक प्रततफिया/ Positive Feedback:</option>
                       <option value="उचित मार्गदर्शन के साथ सहायक ">उचित मार्गदर्शन के साथ सहायक </option>
                       <option value="धैर्य से सुनना">धैर्य से सुनना</option>
@@ -204,8 +206,8 @@ const Feedback = () => {
                     <input
                       type="text"
                       className="reasoninput"
-                      name="reasoninput"
-                      placeholder="Please specify the reason"
+                      name="reasoninputtwo"
+                      placeholder="कृपया कारण निर्दिष्ट करें"
                       onChange={(e) => handleChange(e)}
                     />
                     {/* <button
@@ -304,7 +306,7 @@ const Feedback = () => {
 
                 {show === 'bad' &&
                   <div className="feedback-send">
-                    <select className="selectreason" id="reasonone" name="reasonone" onChange={(e) => handleChange(e)}>
+                    <select className="selectreason" id="reasonone" name="questionthird" onChange={(e) => handleChange(e)}>
                       <option>समस्या श्रेणी/Issue category:</option>
                       <option value="आधिकारिक और कमांडिग">आधिकारिक और कमांडिग </option>
                       <option value="गैर -सहायक">गैर -सहायक</option>
@@ -319,8 +321,9 @@ const Feedback = () => {
                     <input
                       type="text"
                       className="reasoninput"
-                      name="reasoninput"
+                      name="reasoninputthree"
                       placeholder="Please specify the reason"
+                      onChange={(e) => handleChange(e)}
                     />
                     {/* <button
                       name="submit"
@@ -350,7 +353,7 @@ const Feedback = () => {
                       type="text"
                       className="reasoninput"
                       placeholder="Please specify the reason"
-                      name="reasoninput"
+                      name="reasoninputthree"
                       onChange={(e) => handleChange(e)}
                     />
                     {/* <button
