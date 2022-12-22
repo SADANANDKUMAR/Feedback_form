@@ -1,11 +1,17 @@
 import React from "react";
 import './App.css';
+import axios from "axios";
 
-
+import { useLocation } from "react-router-dom";
 
 
 const Feedback = () => {
 
+  const url ="https://api.upss.deepmindz.co/api/v1/add-feedback"
+
+  const { search } = useLocation();
+  const id = new URLSearchParams(search).get('id');
+  console.log(id);
 
   const [show, setShow] = React.useState('')
   const [feedbackOne, setFeedbackOne] = React.useState('');
@@ -13,14 +19,14 @@ const Feedback = () => {
   const [data, setData] = React.useState({
 
     questiontwo: "",
-    questionthird:"",
-    yes :"",
-    reasoninputtwo:"",
-    reasoninputthree:""
+    questionthird: "",
+    yes: "",
+    reasoninputtwo: "",
+    reasoninputthree: ""
 
   })
 
-  
+
   const handlefeedbackOne = (status) => {
 
     setFeedbackOne(status)
@@ -32,16 +38,41 @@ const Feedback = () => {
 
   const handlefeedbackYes = (statusbar) => {
     setYes(statusbar)
+    setData({...data , yes : statusbar})
   }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setData({...data, [name]:value});
+    setData({ ...data, [name]: value });
   }
-  const HandleSubmit = (e) =>{
+  const HandleSubmit = (e) => {
+    e.preventDefault();
     console.log(data);
+    let payload = {
+      worker_id : parseInt(id),
+      Question : data
+    }
+    axios.post(url,payload)
+    .then(res=>{
+      console.log(res.data)
+    })
+
   }
+
+
+//   const addPosts = (title, body) => {
+//     client
+//        .post('', {
+//           title: title,
+//           body: body,
+//        })
+//        .then((response) => {
+//           setPosts([response.data, ...posts]);
+//        });
+//     setTitle('');
+//     setBody('');
+//  };
 
   return (
     <div id="layout-wrapper">
@@ -80,8 +111,9 @@ const Feedback = () => {
               <li>Milk</li>
             </ul>
           </div>
-        
+
           <div className="feedback-q" onSubmit={HandleSubmit}>
+            {/* Question 1  */}
             <ul className="feedback-list">
               <li>
                 <span className="text">
@@ -89,48 +121,48 @@ const Feedback = () => {
                   मुल्यांकन किस प्रकार करेंगे ?
                 </span>
                 <div className="emoji">
-                  <span className="emoji-icon active" onClick={() => handlefeedbackYes('bad')} >
+                  <span className="emoji-icon active" onClick={() => handlefeedbackYes('no')} >
                     <img src="images/terrible.svg" alt="" />
                     <label>उपयोगी नहीं </label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('bad')}>
+                  <span className="emoji-icon" onClick={() => handlefeedbackYes('no')}>
                     <img src="images/not-good.svg" alt=" " />
                     <label>थोड़ा उपयोगी </label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('bad')}>
+                  <span className="emoji-icon" onClick={() => handlefeedbackYes('no')}>
                     <img src="images/ok.svg" alt=" " />
                     <label>ठीक </label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('good')}>
+                  <span className="emoji-icon" onClick={() => handlefeedbackYes('yes')}>
                     <img src="images/good.svg" alt=" " />
                     <label>उपयोगी</label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('good')}>
+                  <span className="emoji-icon" onClick={() => handlefeedbackYes('yes')}>
                     <img src="images/very_good.svg" alt="" />
                     <label>बहुत उपयोगी </label>
                   </span>
                 </div>
-                <div className="button">
+                {/* <div className="button">
 
                   {
                     yes === 'good' &&
 
-                    <button name="yes" className="btn"  onChange={(e) => handleChange(e)}>
+                    <button name="yes" className="btn" onChange={(e) => handleChange(e)}>
                       Yes
                     </button>
                   }
                   {
                     yes === 'bad' &&
-                    <button name="no" className="btn btn-dark"  onChange={(e) => handleChange(e)}>
+                    <button name="no" className="btn btn-dark" onChange={(e) => handleChange(e)}>
                       No
                     </button>
                   }
 
 
 
-                </div>
+                </div> */}
               </li>
-
+              {/* Question 2nd */}
               <li>
                 <span className="text">
                   आपके पयिवेक्षक/सुपरवाइजर का आपके प्रति व्यवहार कैसा था?
@@ -238,7 +270,7 @@ const Feedback = () => {
 
 
 
-
+              {/* Question 3rd */}
               <li>
                 <span className="text">
                   क्या पयिवेक्षक/सुपरवाइजर ने आपकी समस्याओ को सुना और समाधान के लिए
@@ -338,7 +370,7 @@ const Feedback = () => {
                 {show === 'good' &&
 
                   <div className="feedback-send">
-                    <select className="selectreason" id="reasonone" name="reasonone" onChange={(e) => handleChange(e)}>
+                    <select className="selectreason" id="reasonone" name="questionthird" onChange={(e) => handleChange(e)}>
                       <option>सकािात्मक प्रततफिया/ Positive Feedback:</option>
                       <option value="उचित मार्गदर्शन के साथ सहायक">उचित मार्गदर्शन के साथ सहायक </option>
                       <option value="धैर्य से सुनना">धैर्य से सुनना</option>
@@ -371,12 +403,13 @@ const Feedback = () => {
 
               </li>
             </ul>
+            {/* submit the form here  */}
             <button
               name="submit"
               className="submitinput"
               type="submit"
-            // disabled=""
-            onClick={HandleSubmit}
+              // disabled=""
+              onClick={HandleSubmit}
             >
               Submit
             </button>
