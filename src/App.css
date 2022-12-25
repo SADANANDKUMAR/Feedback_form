@@ -155,6 +155,15 @@ ul {
 .emoji .emoji-icon:hover img, .emoji .emoji-icon.active img {
   filter: grayscale(0%);
 }
+ 
+/* .active{
+  background-color:red;
+} */
+
+ /* .emoji .emoji-icon .active{
+  background-color:red;
+} */
+
 
 .feedback-send {
   display: block;
@@ -186,11 +195,11 @@ option {
   margin-top: 20px;
 }
 
-button:disabled {
+/* button:disabled {
   background: #CECECE;
   border-color: #CECECE;
   cursor: not-allowed;
-}
+} */
 
 .submitinput {
   cursor: pointer;
@@ -252,3 +261,18 @@ div{
   box-sizing: border-box;
 }
 
+/* 
+button :active{
+  background-color: #1de588;
+  color: #FFFFFF;
+
+}
+button {
+ 
+  border: none;
+  font-size: 18px;
+  padding: 7px 20px 6px 28px;
+  background-color: #fff;
+  margin: 5px;
+  outline: none;
+} */

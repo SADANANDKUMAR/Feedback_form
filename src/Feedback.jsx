@@ -7,24 +7,29 @@ import { useLocation } from "react-router-dom";
 
 const Feedback = () => {
 
-  const url ="https://api.upss.deepmindz.co/api/v1/add-feedback"
+  const url = "https://api.upss.deepmindz.co/api/v1/add-feedback"
 
   const { search } = useLocation();
   const id = new URLSearchParams(search).get('id');
-  console.log(id);
+  // console.log(id);
+  const [active, setActive] = React.useState("");
+  const [btnState, setBteState] = React.useState(false);
 
   const [show, setShow] = React.useState('')
   const [feedbackOne, setFeedbackOne] = React.useState('');
   const [yes, setYes] = React.useState('');
+  const [showhide, setShowhide] = React.useState('');
   const [data, setData] = React.useState({
 
     questiontwo: "",
     questionthird: "",
-    yes: "",
+    yes: "", 
     reasoninputtwo: "",
     reasoninputthree: ""
 
   })
+
+ 
 
 
   const handlefeedbackOne = (status) => {
@@ -36,13 +41,21 @@ const Feedback = () => {
     setShow(event)
   }
 
-  const handlefeedbackYes = (statusbar) => {
-    setYes(statusbar)
-    setData({...data , yes : statusbar})
+  // Question 1st func
+  const handlefeedbackYes = (event) => {
+    setYes(event)
+    setData({ ...data, yes: event })
+    // setActive(event.target.id);
+    setBteState(btnState => !btnState)
+  
   }
+ 
 
   const handleChange = (e) => {
+    e.preventDefault();
     const { name, value } = e.target;
+    const item = { name, value }
+    setShowhide(item.value)
 
     setData({ ...data, [name]: value });
   }
@@ -50,29 +63,22 @@ const Feedback = () => {
     e.preventDefault();
     console.log(data);
     let payload = {
-      worker_id : parseInt(id),
-      Question : data
+      worker_id: parseInt(id),
+      Question: data
     }
-    axios.post(url,payload)
-    .then(res=>{
-      console.log(res.data)
-    })
+    axios.post(url, payload)
+      .then(res => {
+        console.log(res.data)
+      })
+      .catch(res => {
+        console.log(res, 'Form not sumitted')
+      })
 
   }
 
+  let toggleClassCheck = btnState ? ' active' : null;
 
-//   const addPosts = (title, body) => {
-//     client
-//        .post('', {
-//           title: title,
-//           body: body,
-//        })
-//        .then((response) => {
-//           setPosts([response.data, ...posts]);
-//        });
-//     setTitle('');
-//     setBody('');
-//  };
+
 
   return (
     <div id="layout-wrapper">
@@ -112,7 +118,7 @@ const Feedback = () => {
             </ul>
           </div>
 
-          <div className="feedback-q" onSubmit={HandleSubmit}>
+          <div className="feedback-q"  onSubmit={HandleSubmit}>
             {/* Question 1  */}
             <ul className="feedback-list">
               <li>
@@ -121,23 +127,26 @@ const Feedback = () => {
                   मुल्यांकन किस प्रकार करेंगे ?
                 </span>
                 <div className="emoji">
-                  <span className="emoji-icon active" onClick={() => handlefeedbackYes('no')} >
+                <span className={`emoji-icon ${toggleClassCheck}`} 
+
+                 onClick={() => handlefeedbackYes('no')}
+                 >
                     <img src="images/terrible.svg" alt="" />
                     <label>उपयोगी नहीं </label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('no')}>
+                  <span id="1"  className={`emoji-icon ${toggleClassCheck}`} onClick={() => handlefeedbackYes('no')}>
                     <img src="images/not-good.svg" alt=" " />
                     <label>थोड़ा उपयोगी </label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('no')}>
+                  <span  id="2" className={`emoji-icon ${toggleClassCheck}`}  onClick={() => handlefeedbackYes('no')}>
                     <img src="images/ok.svg" alt=" " />
                     <label>ठीक </label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('yes')}>
+                  <span className={`emoji-icon ${toggleClassCheck}`} onClick={() => handlefeedbackYes('yes')}>
                     <img src="images/good.svg" alt=" " />
                     <label>उपयोगी</label>
                   </span>
-                  <span className="emoji-icon" onClick={() => handlefeedbackYes('yes')}>
+                  <span  className={`emoji-icon ${toggleClassCheck}`} onClick={() => handlefeedbackYes('yes')}>
                     <img src="images/very_good.svg" alt="" />
                     <label>बहुत उपयोगी </label>
                   </span>
@@ -168,7 +177,9 @@ const Feedback = () => {
                   आपके पयिवेक्षक/सुपरवाइजर का आपके प्रति व्यवहार कैसा था?
                 </span>
                 <div className="emoji">
-                  <span className="emoji-icon" onClick={() => handlefeedbackOne('bad')}>
+                  <span 
+                  className="emoji-icon"
+                   onClick={() => handlefeedbackOne('bad')}>
                     <img src="images/terrible.svg" alt="terrible" />
                     <label>उपयोगी नहीं </label>
                   </span>
@@ -204,14 +215,21 @@ const Feedback = () => {
                       </option>
                       <option value="अन्य">अन्य </option>
                     </select>
+                    {
+                      showhide === 'अन्य' ? (
+                        <input
+                          type="text"
+                          name="reasoninputtwo"
+                          className="reasoninput"
+                          maxLength={10}
+                          placeholder="कृपया कारण निर्दिष्ट करें"
+                          onChange={(e) => handleChange(e)}
+                        />
 
-                    <input
-                      type="text"
-                      name="reasoninputtwo"
-                      className="reasoninput"
-                      placeholder="कृपया कारण निर्दिष्ट करें"
-                      onChange={(e) => handleChange(e)}
-                    />
+                      )
+                        : null
+                    }
+
                     {/* <button
                       name="submit"
                       className="submitinput"
@@ -235,13 +253,20 @@ const Feedback = () => {
                       <option value="अन्य">अन्य</option>
                     </select>
 
-                    <input
-                      type="text"
-                      className="reasoninput"
-                      name="reasoninputtwo"
-                      placeholder="कृपया कारण निर्दिष्ट करें"
-                      onChange={(e) => handleChange(e)}
-                    />
+                    {
+                      showhide === 'अन्य' ? (
+                        <input
+                          type="text"
+                          name="reasoninputtwo"
+                          className="reasoninput"
+                          maxLength={10}
+                          placeholder="कृपया कारण निर्दिष्ट करें"
+                          onChange={(e) => handleChange(e)}
+                        />
+
+                      )
+                        : null
+                    }
                     {/* <button
                       name="submit"
                       className="submitinput"
@@ -277,7 +302,7 @@ const Feedback = () => {
                   मदद की ?
                 </span>
                 <div className="emoji">
-                  <span className="emoji-icon active" onClick={() => handlefeedbackTwo('bad')}>
+                  <span className="emoji-icon" onClick={() => handlefeedbackTwo('bad')}>
                     <img src="images/terrible.svg" alt="terrrible" />
                     <label>उपयोगी नहीं </label>
                   </span>
@@ -350,13 +375,19 @@ const Feedback = () => {
                       <option value="अन्य">अन्य </option>
                     </select>
 
-                    <input
-                      type="text"
-                      className="reasoninput"
-                      name="reasoninputthree"
-                      placeholder="Please specify the reason"
-                      onChange={(e) => handleChange(e)}
-                    />
+                    {
+                      showhide === 'अन्य' ? (
+                        <input
+                          type="text"
+                          name="reasoninputthree"
+                          className="reasoninput"
+                          placeholder="कृपया कारण निर्दिष्ट करें"
+                          onChange={(e) => handleChange(e)}
+                        />
+
+                      )
+                        : null
+                    }
                     {/* <button
                       name="submit"
                       className="submitinput"
@@ -381,13 +412,19 @@ const Feedback = () => {
                       <option value="अन्य">अन्य</option>
                     </select>
 
-                    <input
-                      type="text"
-                      className="reasoninput"
-                      placeholder="Please specify the reason"
-                      name="reasoninputthree"
-                      onChange={(e) => handleChange(e)}
-                    />
+                    {
+                      showhide === 'अन्य' ? (
+                        <input
+                          type="text"
+                          name="reasoninputthree"
+                          className="reasoninput"
+                          placeholder="कृपया कारण निर्दिष्ट करें"
+                          onChange={(e) => handleChange(e)}
+                        />
+
+                      )
+                        : null
+                    }
                     {/* <button
                       name="submit"
                       className="submitinput"
@@ -408,7 +445,7 @@ const Feedback = () => {
               name="submit"
               className="submitinput"
               type="submit"
-              // disabled=""
+              disabled=""
               onClick={HandleSubmit}
             >
               Submit
