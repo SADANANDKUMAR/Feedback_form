@@ -17,7 +17,8 @@ function App() {
       <Router>
       <Switch>
         <Route  path='/feedback' ><Feedback/> </Route>
-        <Route path='/nav' ><Navbar/></Route>
+        {/* <Route path='/nav' ><Navbar/></Route> */}
+     
         <Route path='/func'><Navfunc/> <Navfunc/> <Navfunc/> <Navfunc/> </Route>
         {/* <Route  path='/feedback/:id' ><Feedback/> </Route> */}
         <Route path="*" > <><center><h5>Sorry!!....<b>Page Note Found</b></h5></center></></Route>
